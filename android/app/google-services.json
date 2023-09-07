@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "892544903368",
+    "project_id": "viper-17714",
+    "storage_bucket": "viper-17714.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892544903368:android:2d0ea51a74f55b408eddfd",
+        "android_client_info": {
+          "package_name": "likhayakulati.co.za.vapor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892544903368-hd0ban9q8ecet4hr72vickrb1knbk270.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMcY5nzRoZEtFO8rK355WvBENj8FuDPm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892544903368-hd0ban9q8ecet4hr72vickrb1knbk270.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
