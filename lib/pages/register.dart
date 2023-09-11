@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:viper/constants.dart';
 import 'package:viper/pages/login.dart';
+import 'package:viper/pages/user_list.dart';
 
 import '../utilities/glassmorphism.dart';
 
@@ -22,19 +24,40 @@ class _RegisterState extends State<Register> {
   final _passwordRepeat = TextEditingController();
 
   Future registerUser() async {
-    if (_password == _passwordRepeat) {}
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _email.text.trim(),
-        password: _password.text.trim(),
-      );
-    } on FirebaseAuthException catch (e) {
-      showDialog(context: context, builder: (context) {
-        return AlertDialog(
-          content: Text(e.message.toString())
+      if (_password.text.trim() == _passwordRepeat.text.trim()) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _email.text.trim(),
+          password: _password.text.trim(),
         );
-      });
+        userData(_username.text.trim(), _email.text.trim());
+        if (context.mounted) {
+          Navigator.pushNamed(context, UserList.id);
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(content: Text(e.message.toString()));
+        },
+      );
     }
+  }
+
+  Future userData(String username, String email) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'username': username,
+      'email': email,
+    });
+  }
+
+  @override
+  void dispose() {
+    _username;
+    _email;
+    _password;
+    _passwordRepeat;
   }
 
   @override
@@ -67,6 +90,7 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: _email,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black54),
@@ -79,6 +103,7 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    obscureText: true,
                     controller: _password,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black54),
@@ -91,6 +116,7 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    obscureText: true,
                     controller: _passwordRepeat,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black54),
