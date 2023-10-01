@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vapor/pages/login.dart';
+import 'package:vapor/components/tabbar.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -8,21 +8,16 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, Login.id);
-        },
-        child: const Text(
-          'Login',
-        ),
-      ),
-      body: const Center(
+    return const Scaffold(
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'SOMETHING WILL BE HERE IN THE FUTURE!'
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(child: Tabs()),
+                ],
+              ),
             ),
           ],
         ),

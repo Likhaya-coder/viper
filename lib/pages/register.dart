@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vapor/constants.dart';
 import 'package:vapor/pages/login.dart';
@@ -14,6 +15,28 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  //getting user inputs
+  final _username = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  final _passwordRepeat = TextEditingController();
+
+  Future registerUser() async {
+    if (_password == _passwordRepeat) {}
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _email.text.trim(),
+        password: _password.text.trim(),
+      );
+    } on FirebaseAuthException catch (e) {
+      showDialog(context: context, builder: (context) {
+        return AlertDialog(
+          content: Text(e.message.toString())
+        );
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +55,7 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    controller: _username,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black54),
                     decoration: inputDecoration.copyWith(
@@ -43,6 +67,7 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    controller: _email,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black54),
                     decoration: inputDecoration.copyWith(
@@ -54,6 +79,7 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    controller: _password,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black54),
                     decoration: inputDecoration.copyWith(
@@ -65,6 +91,7 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    controller: _passwordRepeat,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black54),
                     decoration: inputDecoration.copyWith(
@@ -108,7 +135,7 @@ class _RegisterState extends State<Register> {
                     ),
                     backgroundColor: Colors.redAccent,
                   ),
-                  onPressed: () {},
+                  onPressed: registerUser,
                   child: const Text('Register'),
                 ),
               ],

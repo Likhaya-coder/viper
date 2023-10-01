@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vapor/constants.dart';
+import 'package:vapor/pages/home.dart';
 import 'package:vapor/pages/register.dart';
 import 'package:vapor/utilities/glassmorphism.dart';
 
@@ -13,6 +15,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +36,9 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    controller: _email,
                     cursorColor: Colors.black,
+                    keyboardType: TextInputType.emailAddress,
                     style: const TextStyle(color: Colors.black54),
                     decoration: inputDecoration.copyWith(
                       hintText: 'Enter your email',
@@ -42,7 +49,9 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
+                    controller: _password,
                     cursorColor: Colors.black,
+                    obscureText: true,
                     style: const TextStyle(color: Colors.black54),
                     decoration: inputDecoration.copyWith(
                       hintText: 'Enter your password',
@@ -85,7 +94,21 @@ class _LoginState extends State<Login> {
                     ),
                     backgroundColor: Colors.redAccent,
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: _email.text.trim(),
+                        password: _password.text.trim(),
+                      );
+                      Navigator.pushNamed(context, Home.id);
+                    } on FirebaseAuthException catch (e) {
+                      showDialog(context: context, builder: (context) {
+                        return AlertDialog(
+                            content: Text(e.message.toString())
+                        );
+                      });
+                    }
+                  },
                   child: const Text('Login'),
                 ),
               ],
